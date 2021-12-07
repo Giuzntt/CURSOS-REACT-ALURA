@@ -4,12 +4,19 @@ class ListaDeCategorias extends Component {
     render() { 
         return (
         <section>
-            <ul>
-                <li>Categorias</li>
-                <li>Categorias</li>
-                <li>Categorias</li>
-            </ul>
-            <input type="text" placeholder="Adicione a categoria"/>
+                <section className="lista-categorias">
+                    <ul className="lista-categorias_lista">
+                        <li className="lista-categorias_item">Categoria</li>
+                        <li className="lista-categorias_item">Categoria</li>
+                        <li className="lista-categorias_item">Categoria</li>
+                    </ul>
+                    <input
+                        type="text"
+                        className="lista-categorias_input"
+                        placeholder="Adicionar Categoria"
+                      
+                    />
+                </section>
         </section>
         );
     }
