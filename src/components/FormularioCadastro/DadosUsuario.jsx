@@ -8,7 +8,7 @@ function DadosUsuario() {
         <form>
             <TextField
               id="email"
-              label="email"
+              label="E-mail"
               type={'email'}
               variant='outlined'
               fullWidth
@@ -16,7 +16,7 @@ function DadosUsuario() {
             />
             <TextField
               id="password"
-              label="senha"
+              label="Senha"
               type={'password'}
               variant='outlined'
                 fullWidth
