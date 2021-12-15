@@ -1,93 +1,104 @@
-import React, { useState } from 'react';
-import Button from '@material-ui/core/Button'
-import TextField from '@material-ui/core/TextField'
-import { FormControlLabel, FormGroup, Switch } from '@material-ui/core';
+import React, { useState, useContext } from "react";
+import { TextField, Button, Switch, FormControlLabel } from "@material-ui/core";
+import ValidacoesCadastro from "../../contexts/ValidacaoCadastro"
+import useErros from "../../hooks/useErros";
 
-
-
-function DadosPessoais({ aoEnviar, validarCPF }) {
-    const [nome, setNome] = useState('');
-    const [sobrenome, setSobrenome] = useState('');
-    const [cpf, setCpf] = useState('');
+function DadosPessoais({ aoEnviar }) {
+    const [nome, setNome] = useState("");
+    const [sobrenome, setSobrenome] = useState("");
+    const [cpf, setCpf] = useState("");
     const [promocoes, setPromocoes] = useState(true);
-    const [novidades, setNovidades] = useState(true);
-    const [erros, setErros] = useState({ cpf: { valido: true, texto: '' } })
+    const [novidades, setNovidades] = useState(false);
+    const validacoes = useContext(ValidacoesCadastro)
+    const [erros, validarCampos, possoEnviar] = useErros(validacoes);
+
+
+
     return (
-        <form onSubmit={(event => {
-            event.preventDefault();
-            aoEnviar({ nome, sobrenome, cpf, promocoes, novidades });
-        })}>
+        <form
+            onSubmit={(event) => {
+                event.preventDefault();
+                if (possoEnviar()) {
+                    aoEnviar({ nome, sobrenome, cpf, novidades, promocoes });
+                }
+            }}
+        >
             <TextField
                 value={nome}
                 onChange={(event) => {
-                    setNome(event.target.value)
+                    setNome(event.target.value);
                 }}
+                onBlur={validarCampos}
+                error={!erros.nome.valido}
+                helperText={erros.nome.texto}
                 id="nome"
-                label="Nome" variant="outlined"
-                fullWidth margin='normal'
+                label="Nome"
+                name="nome"
+                variant="outlined"
+                margin="normal"
+                fullWidth
             />
             <TextField
                 value={sobrenome}
                 onChange={(event) => {
-                    setSobrenome(event.target.value)
+                    setSobrenome(event.target.value);
                 }}
-
-                id="sobrenome" label="Sobrenome" variant="outlined" fullWidth margin='normal' />
-
+                id="sobrenome"
+                name="sobrenome"
+                label="Sobrenome"
+                variant="outlined"
+                margin="normal"
+                fullWidth
+            />
             <TextField
                 value={cpf}
+                onChange={(event) => {
+                    setCpf(event.target.value);
+                }}
+                onBlur={validarCampos}
                 error={!erros.cpf.valido}
                 helperText={erros.cpf.texto}
+                id="CPF"
+                name="cpf"
+                label="CPF"
+                variant="outlined"
+                margin="normal"
+                fullWidth
+            />
 
-                onBlur={(event) => {
-                    const ehValido = validarCPF(cpf)
-                    setErros({ cpf: ehValido })
-                }}
-
-
-                onChange={(event) => {
-                    setCpf(event.target.value)
-                }}
-                id="cpf"
-                label="CPF" variant="outlined" fullWidth margin='normal' />
-
-
-
-            <FormGroup>
-                <FormControlLabel control={
-                    <Switch onChange={(event) => {
-                        setPromocoes(event.target.checked)
-                    }}
+            <FormControlLabel
+                label="Promoções"
+                control={
+                    <Switch
                         checked={promocoes}
-                        color='primary' />} label="Promocoes" />
-                <FormControlLabel control={<Switch
-                    onChange={(event) => {
-                        setNovidades(event.target.checked)
-                    }}
+                        onChange={(event) => {
+                            setPromocoes(event.target.checked);
+                        }}
+                        name="promocoes"
+                        color="primary"
+                    />
+                }
+            />
 
-                    checked={novidades} color='primary' />} label="Novidades" />
-            </FormGroup>
+            <FormControlLabel
+                label="Novidades"
+                control={
+                    <Switch
+                        checked={novidades}
+                        onChange={(event) => {
+                            setNovidades(event.target.checked);
+                        }}
+                        name="novidades"
+                        color="primary"
+                    />
+                }
+            />
 
-
-
-
-
-            < Button variant="contained"
-                type='submit'
-                color="primary"
-                fullWidth >
-                Cadastrar
-
+            <Button type="submit" variant="contained" color="primary">
+                Próximo
             </Button>
-
-
-
         </form>
-    )
-
-
+    );
 }
 
-
-
-export default DadosPessoais
+export default DadosPessoais;
